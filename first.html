@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEXCODE FINDER FROM IMAGE</title>
+</head>
+<style>
+h1{
+text-align: center;
+color: white;
+padding: 20px;
+}
+.reverse{
+width: 50%;
+margin: auto;
+padding: 20px;
+border: 3px solid black;
+}
+input{
+height: 20px;
+}
+</style>
+<body background="image.jpeg">
+<h1>HEXCODE GENERATOR</h1>
+<div class="reverse">
+    <label >Enter image URL</label><br>
+    <input id="hello"><br><br>
+    <a href="index.html" onclick="passString(document.getElementById('hello').value)")><button>Convert</button><br><br></a>
+    
+    </div>
+    </body>
+    </html>
+    <script>
+    function temperature(){
+    var a, no, b, temp=0;
+    no= Number(document.getElementById("hello").value);
+    b = no;
+    a = (no * 9/5) + 32
+    no = parseInt(no/10);
+    document.getElementById("hello1").value=a;
+    }
+    function passString(optionch){
+    localStorage.setItem("option", optionch);
+}
+    </script>
+    

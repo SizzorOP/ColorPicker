@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Demo</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        font-size: 20px;
+        font-weight: 300;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.5;
+      }
+      .grid {
+        border: 1px solid #333;
+        width: 402px;
+        height: 402px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .pixel {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #111;
+        position: relative;
+        padding: 20px 5px;
+      }
+      .pixel::before {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        content: '(' attr(data-coord) ')';
+      }
+      .pixel:hover {
+        outline: 2px solid orangered;
+      }
+      .highlight {
+        background-color: gold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Extracting Colour Values from Pixel Coordinates</h1>
+    <section class="grid" data-cols="4" data-rows="4"></section>
+    <p>
+      The above grid represents and image that is <span id="cols"></span> by
+      <span id="rows"></span> pixels.
+    </p>
+    <section>
+      <p id="coords"></p>
+      <p id="pixelPos"></p>
+      <p id="arrayPos"></p>
+      <p id="arraySize"></p>
+    </section>
+    <script>
+      let grid = document.querySelector('.grid');
+      let cols = grid.getAttribute('data-cols');
+      let rows = grid.getAttribute('data-rows');
+      //display the grid info in the paragraph below the grid
+      document.getElementById('cols').textContent = cols;
+      document.getElementById('rows').textContent = rows;
+      //size the grid
+      grid.style.width = `${cols * 100 + 2}px`;
+      grid.style.height = `${rows * 100 + 2}px`;
+      //build the grid based on data-rows and data-cols attributes
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          let div = document.createElement('div');
+          div.className = 'pixel';
+          div.setAttribute('data-coord', `${c}, ${r}`);
+          grid.append(div);
+        }
+      }
+      //listen for mouse movement over the grid
+      document.querySelector('.grid').addEventListener('mousemove', getPixel);
+
+      function getPixel(ev) {
+        let pixel = ev.target;
+        //remove the old highlight class
+        document.querySelector('.highlight')?.classList.remove('highlight');
+        //add the highlist class to the current pixel div
+        pixel.classList.add('highlight');
+        let p1 = document.getElementById('coords');
+        let p2 = document.getElementById('pixelPos');
+        let p3 = document.getElementById('arrayPos');
+        let p4 = document.getElementById('arraySize');
+
+        let coords = pixel.getAttribute('data-coord');
+        p1.textContent = `Selected pixel (${coords})`;
+
+        let pixelPos = coords.split(', ');
+        let col = Number(pixelPos[0]);
+        let row = Number(pixelPos[1]);
+        let pixelIndex = cols * row + col;
+        p2.innerHTML = `Pixel INDEX<br/>Total columns * row + column<br/>${cols} * ${row} + ${col} = ${pixelIndex}`;
+
+        let arrayPos = pixelIndex * 4;
+        p3.innerHTML = `Pixel [r,g,b,a] values in array positions<br/>[ ${arrayPos}, ${
+          arrayPos + 1
+        }, ${arrayPos + 2}, ${arrayPos + 3} ]`;
+
+        p4.innerHTML = `In the grid there are ${
+          rows * cols
+        } pixels.<br/>In the Array there are ${rows * cols * 4} elements.`;
+      }
+    </script>
+  </body>
+</html>
